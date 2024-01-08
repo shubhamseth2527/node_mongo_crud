@@ -1,0 +1,33 @@
+@hostname = http://localhost:3000
+get {{hostname}}
+
+###
+get {{hostname}}/api/users
+
+### 
+get {{hostname}}/api/users/condition
+
+###
+get {{hostname}}/api/users/659ab167feea355e370f0259
+
+###
+get {{hostname}}/api/users?email=prince.shukla@gmail.com
+
+###
+POST {{hostname}}/api/users/659c5b074612700e9df84582 HTTP/1.1
+Content-Type: application/json
+
+{
+    "phone": 9981966624
+}
+
+###
+POST {{hostname}}/api/users/add
+Content-Type: application/json
+
+{
+    "name": "Harsh Rana",
+    "email": "harsh.rana@gmail.com",
+    "phone": 9981966624,
+    "place": "Germantown"
+}
