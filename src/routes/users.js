@@ -7,7 +7,8 @@ const UserController = require('../controller/users');
 router.get('/api/users' , UserController.findAll);
 router.get('/api/users/:id' , UserController.findOne);
 router.post('/api/users/add' , UserController.save);
-router.post('/api/users/:id' , UserController.findByIdAndUpdate);
+router.put('/api/users/:id' , UserController.findByIdAndUpdate);
+router.delete('/api/users/:id' , UserController.findByIdAndDelete);
 
 
 

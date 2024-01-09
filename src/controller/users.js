@@ -20,7 +20,7 @@ const findOne = async (req, res) => {
     }
 };
 const findByCondition = async(req, res) => {
-    console.log('Request Q,P,B -> ' , req.query,req.params, req.body)
+    console.log('Calling findByCondition Request Q,P,B -> ' , req.query,req.params, req.body);
     try {
         const where = req.query.where;
         const name = req.query.name
@@ -39,11 +39,19 @@ const findByCondition = async(req, res) => {
 }
 
 const findByIdAndUpdate = async(req, res) => {
-    console.log('Request Q,P,B -> ' , req.query,req.params, req.body)
-    const id = req.params.id;
-    const phone = req.body.phone;
+    console.log('Calling findByIdAndUpdate Request Q,P,B -> ' , req.query,req.params, req.body);
     try {
-        await UsersModel.findByIdAndUpdate(id, {phone: phone})
+        const data = req.body;
+        const paramsId = req.params.id;
+        const filter = { _id: new ObjectId(paramsId) };
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: {
+            user: data.user,
+            email: data.email,
+            },
+        };
+        await UsersModel.updateOne(filter, updateDoc, options);
         res
         .status(200)
         .json({message:'User updated successfully!'});
@@ -84,11 +92,28 @@ const save = async(req, res) => {
         });
     }
 }
+const findByIdAndDelete = async(req, res) => {
+    console.log('Calling findByIdAndDelete Request Q,P,B -> ' , req.query,req.params, req.body);
+    try {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        await UsersModel.deleteOne(query);
+        res
+        .status(200)
+        .json({message:'User Deleted successfully!'});
+    } catch (error) {
+        res.status(200).json({ 
+            message:'User not deleted!', 
+            error:error
+        });
+    }
+}
 module.exports = {
     findAll,
     findOne,
     findByCondition,
     findByIdAndUpdate,
     save,
+    findByIdAndDelete
     
 }

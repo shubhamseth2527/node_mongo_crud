@@ -1,18 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 require('dotenv').config();
 
 const {
-  DB_URL,
+  MONGO_URL,
   SERVER_PORT,
 } = require('./src/util/constant');
 
 const app = express();
+app.use(cors())
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(DB_URL)
+mongoose.connect(MONGO_URL)
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('Connection error', error));
 
