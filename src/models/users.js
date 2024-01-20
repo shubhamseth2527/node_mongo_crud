@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const usersSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: false,
     },
     email: {
         type: String,
-        required: true,
+        required: [true, "Please provide an Email!"],
         unique: true,
         validate: {
             validator: function(value) {
@@ -21,13 +21,18 @@ const usersSchema = mongoose.Schema({
         }
      
     },
+    password: {
+        type: String,
+        required: [true, "Please provide a password!"],
+        unique: false,
+    },
     phone: {
         type: Number,
-        required: true
+        required: false
     },
     place: {
         type: String,
-        required: true
+        required: false
     }
    });
 //Creating the collection Users
