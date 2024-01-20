@@ -1,4 +1,4 @@
-const UsersModel = require('../mongoose/models/users');
+const UsersModel = require('../models/users');
 const findAll = async(req, res) => {
   try {
     const users =  await UsersModel.find();
