@@ -4,10 +4,12 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../../docs/swagger.json');
 const UsersModel = require('../models/users');
 const UserController = require('../controllers/users');
-// Get all users 
+const auth = require('../auth/authentication');
 
+router.post("/api/users/login", UserController.login)
+router.post("/api/users/register", UserController.register);
 router.get('/api/users' , UserController.findAll);
-router.get('/api/users/:id' , UserController.findOne);
+router.get('/api/users/:id' , auth, UserController.findOne);
 router.post('/api/users/add' , UserController.save);
 router.put('/api/users/:id' , UserController.findByIdAndUpdate);
 router.delete('/api/users/:id' , UserController.findByIdAndDelete);

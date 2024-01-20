@@ -1,4 +1,4 @@
-@hostname = http://localhost:3000
+@hostname = http://localhost:8000
 get {{hostname}}
 
 ###
@@ -30,4 +30,13 @@ Content-Type: application/json
     "email": "shubhangi.seth@gmail.com",
     "phone": 81879966624,
     "place": "Dubai"
+}
+
+###
+POST {{hostname}}/api/users/register
+Content-Type: application/json
+
+{
+    "email": "alok.singh@gmail.com",
+    "password": "password"
 }
