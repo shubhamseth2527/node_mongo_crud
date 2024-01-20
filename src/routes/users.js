@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../../docs/swagger.json');
-const UsersModel = require('../mongoose/models/users');
+const UsersModel = require('../models/users');
 const UserController = require('../controllers/users');
 // Get all users 
 

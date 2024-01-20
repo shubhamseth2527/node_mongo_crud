@@ -26,8 +26,8 @@ POST {{hostname}}/api/users/add
 Content-Type: application/json
 
 {
-    "name": "Harsh Rana",
-    "email": "harsh.rana@gmail.com",
-    "phone": 9981966624,
-    "place": "Germantown"
+    "name": "Shubhangi Seth",
+    "email": "shubhangi.seth@gmail.com",
+    "phone": 81879966624,
+    "place": "Dubai"
 }
