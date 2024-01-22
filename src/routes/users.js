@@ -2,24 +2,24 @@ const express = require('express');
 const router = express.Router();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../../docs/swagger.json');
-const UsersModel = require('../models/users');
 const UserController = require('../controllers/users');
 const auth = require('../auth/authentication');
+const {requiredFields} = require('../middlewares/errorhandled')
+const {
+    PATHS,
+    BASE_USER_API_URL
+} = require('../util/constant');
 
-router.post("/api/users/login", UserController.login)
-router.post("/api/users/register", UserController.register);
-router.get('/api/users' , UserController.findAll);
-router.get('/api/users/:id' , auth, UserController.findOne);
-router.post('/api/users/add' , UserController.save);
-router.put('/api/users/:id' , UserController.findByIdAndUpdate);
-router.delete('/api/users/:id' , UserController.findByIdAndDelete);
+router.post(BASE_USER_API_URL+PATHS.login,requiredFields(['email', 'password']), UserController.login)
+router.post(BASE_USER_API_URL+PATHS.register, UserController.register);
+router.get(BASE_USER_API_URL ,auth,  UserController.findAll);
+router.get(BASE_USER_API_URL+PATHS.id, auth, UserController.findOne);
+router.post(BASE_USER_API_URL+PATHS.add , UserController.create);
+router.put(BASE_USER_API_URL+PATHS.id, UserController.findByIdAndUpdate);
+router.delete(BASE_USER_API_URL+PATHS.id, UserController.findByIdAndDelete);
+router.get('/api/user/email', requiredFields(['email']), auth, UserController.findByEmail);
 var options = {
     explorer: true,
-    swaggerOptions: {
-    //   urls: [
-    //    {url: 'http://petstore.swagger.io/v2/swagger.json',name: 'Spec1'},
-    //   ]
-    }
 };
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 router.get('/api-docs');

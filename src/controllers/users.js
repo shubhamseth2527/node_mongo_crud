@@ -96,7 +96,7 @@ const register = async(req, res) => {
         }); 
     });
 }
-const save = async(req, res) => {
+const create = async(req, res) => {
     console.log('Calling save Request Q,P,B -> ' , req.query,req.params, req.body);
     try {
     const doesEmailExist = await UsersModel.findOne({email: req.body.email});
@@ -184,13 +184,24 @@ const login  = (req, res) => {
       });
     });
 }
+
+const findByEmail = async(req, res) => {
+  console.log('Calling findByIdAndUpdate Request body-> ' , req.body);
+  try {
+    const user = await UsersModel.findOne({email: req.body.email});
+    res.status(200).json(user);
+  } catch(error) {
+      res.status(404).json({ message: error.message});
+  }
+}
 module.exports = {
     findAll,
     findOne,
     findByCondition,
     findByIdAndUpdate,
-    save,
+    create,
     findByIdAndDelete,
     register,
     login,
+    findByEmail,
 }
