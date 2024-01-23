@@ -12,12 +12,12 @@ const {
 
 router.post(BASE_USER_API_URL+PATHS.login,requiredFields(['email', 'password']), UserController.login)
 router.post(BASE_USER_API_URL+PATHS.register, UserController.register);
-router.get(BASE_USER_API_URL ,auth,  UserController.findAll);
+router.get(BASE_USER_API_URL,  UserController.findAll);
 router.get(BASE_USER_API_URL+PATHS.id, auth, UserController.findOne);
 router.post(BASE_USER_API_URL+PATHS.add , UserController.create);
 router.put(BASE_USER_API_URL+PATHS.id, UserController.findByIdAndUpdate);
 router.delete(BASE_USER_API_URL+PATHS.id, UserController.findByIdAndDelete);
-router.get('/api/user/email', requiredFields(['email']), auth, UserController.findByEmail);
+router.get('/api/user/'+PATHS.email, requiredFields(['email']), auth, UserController.findByEmail);
 var options = {
     explorer: true,
 };

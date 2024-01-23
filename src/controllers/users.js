@@ -66,35 +66,50 @@ const findByIdAndUpdate = async(req, res) => {
 }
 
 const register = async(req, res) => { 
-    console.log('Calling register Body -> ' ,req.body);
-    bcrypt
-    .hash(req.body.password, 10)
-    .then((hashedPassword) => {
-      const user = new UsersModel({
-        email: req.body.email,
-        password: hashedPassword,
-      });
-      user
-      .save()
-      .then((result) => {
-        res.status(201).send({
-          message: "User Created Successfully",
-          result,
+    console.log('Calling register -> ' ,req.body);
+    try {
+      const emailExist = await UsersModel.findOne({email: req.body.email});
+      const message = `Email already exists : ${emailExist}`;
+      if (emailExist) {
+        res
+        .status(400)
+        .json({ 
+            message:message, 
+            email: emailExist.email
         });
-      })
-      .catch((error) => {
-        res.status(500).send({
-          message: "Error creating user",
-          error,
+      } else {
+        bcrypt
+        .hash(req.body.password, 10)
+        .then((hashedPassword) => {
+          const user = new UsersModel({
+            email: req.body.email,
+            password: hashedPassword,
+          });
+          user
+          .save()
+          .then((result) => {
+            res.status(201).send({
+              message: "User Created Successfully",
+              result,
+            });
+          })
+          .catch((error) => {
+            res.status(500).send({
+              message: "Error creating user",
+              error,
+            });
+          });
+        })
+        .catch((e) => {
+            response.status(500).send({
+            message: "Password was not hashed successfully",
+            e,
+            }); 
         });
-      });
-    })
-    .catch((e) => {
-        response.status(500).send({
-        message: "Password was not hashed successfully",
-        e,
-        }); 
-    });
+      }
+    } catch (error){
+      console.log('Error')
+    }
 }
 const create = async(req, res) => {
     console.log('Calling save Request Q,P,B -> ' , req.query,req.params, req.body);
@@ -186,7 +201,7 @@ const login  = (req, res) => {
 }
 
 const findByEmail = async(req, res) => {
-  console.log('Calling findByIdAndUpdate Request body-> ' , req.body);
+  console.log('Calling findByEmail Request body-> ' , req.body.email);
   try {
     const user = await UsersModel.findOne({email: req.body.email});
     res.status(200).json(user);
