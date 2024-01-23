@@ -37,6 +37,15 @@ POST {{hostname}}/api/users/register
 Content-Type: application/json
 
 {
-    "email": "alok.singh@gmail.com",
-    "password": "password"
+    "email": "shubham.seth@gmail.com",
+    "password": "Shu@123"
+}
+
+###
+POST {{hostname}}/api/users/login
+Content-Type: application/json
+
+{
+    "email": "shubham.seth@gmail.com",
+    "password": "Shu@123"
 }
