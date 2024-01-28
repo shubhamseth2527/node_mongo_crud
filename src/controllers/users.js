@@ -2,7 +2,7 @@ const UsersModel = require('../models/users');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const crypto = require('crypto');
-const { use } = require('../routes/users');
+const { use } = require('../routes/usersRoutes');
 const findAll = async(req, res) => {
   try {
     const users =  await UsersModel.find();
