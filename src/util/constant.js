@@ -7,7 +7,9 @@ const PATHS = {
     register: 'register',
     id: ':id',
     create: 'create',
-    email: 'email'
+    email: 'email',
+    forgot_password: 'forgot-password',
+    reset_password: 'reset-password',
 }
 module.exports =  {
     MONGO_URL,

@@ -1,6 +1,8 @@
 const UsersModel = require('../models/users');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto');
+const { use } = require('../routes/users');
 const findAll = async(req, res) => {
   try {
     const users =  await UsersModel.find();
@@ -209,6 +211,65 @@ const findByEmail = async(req, res) => {
       res.status(404).json({ message: error.message});
   }
 }
+
+const forgotPassword  = async(req,res) => {
+  console.log('Calling forgotPassword Request body-> ' , req.body.email);
+  try {
+    // Check if the user exists
+    const {email} = req.body;
+    const user = await UsersModel.findOne({email: email});
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    // Generate a reset token
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    const filter = {_id: user.id};
+    const options = { upsert: true };
+    const updateDoc = {
+        $set: {
+        resetToken: resetToken,
+        resetTokenExpiration : Date.now() + 3600000, // Token expires in 1 hour
+        },
+    };
+    console.log(updateDoc);
+    await UsersModel.updateOne(filter, updateDoc, options);
+    res.status(200).json({ message: 'Password reset token sent' });
+  } catch(error) {
+    console.error('Error generating reset token:', error);
+    res.status(500).json({ message: error.message});
+  }
+};
+const resetPassword  = async(req,res) => {
+  console.log('Calling resetPassword Request body-> ' , req.body.resetToken);
+  try {
+    const { resetToken, newPassword } = req.body;
+    // Find the user with the provided reset token
+    const user = await UsersModel.findOne({
+      resetToken,
+      resetTokenExpiration: { $gt: Date.now() },
+    });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid or expired reset token' });
+    }
+    const filter = {_id: user.id};
+    // Encrypt and hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const options = { upsert: true };
+    // Update the user's password and reset token fields
+    const updateDoc = {
+        $set: {
+        password: hashedPassword,
+        resetToken: 'undefined',
+        resetTokenExpiration : 'undefined', // Token expires in 1 hour
+        },
+    };
+    await UsersModel.updateOne(filter, updateDoc, options);
+    res.status(200).json({ message: 'Password reset successful' });
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    res.status(500).json({ error: 'An error occurred while resetting the password' });
+  }
+};
 module.exports = {
     findAll,
     findOne,
@@ -219,4 +280,6 @@ module.exports = {
     register,
     login,
     findByEmail,
+    forgotPassword,
+    resetPassword
 }

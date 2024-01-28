@@ -33,8 +33,12 @@ const usersSchema = mongoose.Schema({
     place: {
         type: String,
         required: false
-    }
+    },
+    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    resetToken: {type: String, required: false},
+    resetTokenExpiration: { type: String, required: false},
    });
+   usersSchema.set('timestamps', true);
 //Creating the collection Users
 const UsersModel = mongoose.model('Users', usersSchema);
 module.exports = UsersModel
