@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
     res.json({"message": "Welcome to Users application."});
 });
 // Routes
-app.use('/', require('./src/routes/users'));
+app.use('/', require('./src/routes/usersRoutes'));
 
 
 app.listen(SERVER_PORT, () => {
